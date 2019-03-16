@@ -40,6 +40,6 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://drawpile.net/files/src/drawpile-2.1.2.tar.gz
-        sha256: 11d69427abe60a3c3a7cdbac4252bacbea1bf712d89125306eb0277ec2b0730a
+        url: https://drawpile.net/files/src/drawpile-2.1.3.tar.gz
+        sha256: 92375a046479952c57ebd6f32bb363b8be9ace53030a196f3746dae86091cf3a
 
