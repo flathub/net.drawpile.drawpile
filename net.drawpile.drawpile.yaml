@@ -38,9 +38,10 @@ modules:
     config-opts:
       - -DSERVER=off
       - -DINSTALL_DOC=off
+      - -DKIS_TABLET=on
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://drawpile.net/files/src/drawpile-2.1.10.tar.gz
-        sha256: 1502ff00d87734d68b201894a59b53afd5a2ea3b33123fb2e2d8c0597eb9941c
+        url: https://drawpile.net/files/src/drawpile-2.1.11.tar.gz
+        sha256: 75b3050441bfc54dddfbb5bd2231a13428e5deef52c49c9319536ea6f2df2503
 
