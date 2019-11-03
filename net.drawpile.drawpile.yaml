@@ -42,6 +42,6 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://drawpile.net/files/src/drawpile-2.1.12.tar.gz
-        sha256: b6946a5c9676355e913d41a37ad98f7a06469c7ff9901be674be455a7b107e4b
+        url: https://drawpile.net/files/src/drawpile-2.1.13.tar.gz
+        sha256: ae6baef4e248634396347a19a8f5d9d7003722305be6fd4b30e4d126ff84a664
 
