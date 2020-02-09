@@ -13,6 +13,7 @@ finish-args:
   - --device=dri
   - --filesystem=host # needed for recording index sidecar files and until xdg-desktop-portal provides a directory tree portal so we can export animation frames
   - --system-talk-name=org.freedesktop.Avahi # DNS-SD local server discovery
+  - --talk-name=org.freedesktop.secrets
 
 modules:
   - name: miniupnpc
@@ -31,6 +32,18 @@ modules:
       - /lib/*.a
       - /lib/pkgconfig
       - /include
+
+  - name: qtkeychain
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=/app/lib
+      - -DLIB_INSTALL_DIR=/app/lib
+      - -DBUILD_TRANSLATIONS=NO
+    sources:
+      - type: archive
+        url: https://github.com/frankosterfeld/qtkeychain/archive/v0.10.0.tar.gz
+        sha256: 5f916cd97843de550467db32d2e10f218b904af5b21cfdfcc7c6425d7dfc3ec2
 
   - name: drawpile
     buildsystem: cmake
