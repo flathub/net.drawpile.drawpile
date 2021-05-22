@@ -1,7 +1,7 @@
 app-id: net.drawpile.drawpile
 branch: stable
 runtime: org.kde.Platform
-runtime-version: '5.12'
+runtime-version: '5.15'
 sdk: org.kde.Sdk
 command: drawpile
 rename-icon: drawpile
@@ -57,4 +57,5 @@ modules:
       - type: archive
         url: https://drawpile.net/files/src/drawpile-2.1.17.tar.gz
         sha256: ee7f7ba81e6f1a9c3c32275f84364d10713c24ec040da8cb4b13c3ea6bb09086
-
+      - type: patch
+        path: qt15.patch
