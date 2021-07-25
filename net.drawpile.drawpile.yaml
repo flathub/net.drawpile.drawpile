@@ -55,7 +55,5 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://drawpile.net/files/src/drawpile-2.1.17.tar.gz
-        sha256: ee7f7ba81e6f1a9c3c32275f84364d10713c24ec040da8cb4b13c3ea6bb09086
-      - type: patch
-        path: qt15.patch
+        url: https://drawpile.net/files/src/drawpile-2.1.18.tar.gz
+        sha256: 20668661f6949addceb934ef094232f0890ade620fa78ae4849558d059d03caa
