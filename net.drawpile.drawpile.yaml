@@ -1,59 +1,82 @@
 app-id: net.drawpile.drawpile
 branch: stable
 runtime: org.kde.Platform
-runtime-version: '5.15-21.08'
+runtime-version: '6.6'
 sdk: org.kde.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/drawpile/cargo
+    CARGO_OFFLINE: 'true'
 command: drawpile
 rename-icon: drawpile
 finish-args:
-  - --socket=x11
+  - --socket=wayland
+  - --socket=fallback-x11
   - --share=ipc
   - --share=network
   - --socket=pulseaudio # needed for notification sound playback
   - --device=dri
-  - --filesystem=host # needed for recording index sidecar files and until xdg-desktop-portal provides a directory tree portal so we can export animation frames
-  - --system-talk-name=org.freedesktop.Avahi # DNS-SD local server discovery
   - --talk-name=org.freedesktop.secrets
 
 modules:
-  - name: miniupnpc
-    buildsystem: simple
-    sources:
-      - type: archive
-        url: http://miniupnp.free.fr/files/download.php?file=miniupnpc-2.1.tar.gz
-        sha256: e19fb5e01ea5a707e2a8cb96f537fbd9f3a913d53d804a3265e3aeab3d2064c6
-        dest-filename: miniupnpc.tar.gz
-    build-commands:
-      - INSTALLPREFIX=/app make install
-    cleanup:
-      - /bin/external-ip
-      - /bin/upnpc
-      - /share/man
-      - /lib/*.a
-      - /lib/pkgconfig
-      - /include
-
+  - shared-modules/libsecret/libsecret.json
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
     config-opts:
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
       - -DLIB_INSTALL_DIR=/app/lib
-      - -DBUILD_TRANSLATIONS=NO
+      - -DBUILD_TRANSLATIONS=off
+      - -DBUILD_WITH_QT6=on
     sources:
-      - type: archive
-        url: https://github.com/frankosterfeld/qtkeychain/archive/v0.10.0.tar.gz
-        sha256: 5f916cd97843de550467db32d2e10f218b904af5b21cfdfcc7c6425d7dfc3ec2
-
+      - type: git
+        url: https://github.com/frankosterfeld/qtkeychain.git
+        tag: 0.14.1
+        commit: 69f993c47efed7e557d79a30a367014d9a27d809
+  - name: libzip
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=/app/lib
+      - -DBUILD_TOOLS=off
+      - -DBUILD_REGRESS=off
+      - -DBUILD_DOC=off
+      - -DBUILD_EXAMPLES=off
+      - -DENABLE_COMMONCRYPTO=off
+      - -DENABLE_GNUTLS=off
+      - -DENABLE_MBEDTLS=off
+      - -DENABLE_OPENSSL=off
+      - -DENABLE_WINDOWS_CRYPTO=off
+      - -DENABLE_BZIP2=off
+      - -DENABLE_LZMA=off
+      - -DENABLE_ZSTD=off
+    sources:
+      - type: git
+        url: https://github.com/nih-at/libzip.git
+        tag: v1.10.1
+        commit: 210b09d9d2d0f4c0bbc64f92ad45c1ac53598fec
   - name: drawpile
     buildsystem: cmake
     builddir: true
     config-opts:
-      - -DSERVER=off
-      - -DINSTALL_DOC=off
-      - -DKIS_TABLET=on
+      - -DADDRESS_SANITIZER=off
+      - -DBUILTINSERVER=on
+      - -DCLANG_TIDY=off
       - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=on
+      - -DINSTALL_DOC=off
+      - -DSERVER=off
+      - -DSERVERGUI=off
+      - -DSOURCE_ASSETS=off
+      - -DTESTS=off
+      - -DTOOLS=off
+      - -DUSE_STRICT_ALIASING=on
     sources:
-      - type: archive
-        url: https://drawpile.net/files/src/drawpile-2.1.20.tar.gz
-        sha256: a2f45e8b7482854288eb7b7f9db0961c79f0129ab92216280fdb94457e0d0fa9
+      - type: git
+        url: https://github.com/drawpile/Drawpile.git
+        tag: 2.2.0
+        commit: b0e343eae8a9707ba5ec6f2f3d57e18d62fe3359
+      - cargo-sources.json
