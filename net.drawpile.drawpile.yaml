@@ -74,9 +74,9 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.0
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        commit: 3f831b387fa5778420a0ae189bd07b000e8b3f66
+        tag: 2.2.1
+        commit: 21018455808f683ca8c6a517983354cc6a933400
       - cargo-sources.json
