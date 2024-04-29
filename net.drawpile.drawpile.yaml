@@ -3,8 +3,10 @@ branch: stable
 runtime: org.kde.Platform
 runtime-version: '6.6'
 sdk: org.kde.Sdk
+# Remove this when updating to 2.2.2, it no longer needs Rust.
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
+# Remove this when updating to 2.2.2, it no longer needs Rust.
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
   env:
@@ -79,4 +81,5 @@ modules:
         url: https://github.com/drawpile/Drawpile.git
         tag: 2.2.1
         commit: 21018455808f683ca8c6a517983354cc6a933400
+      # Remove this when updating to 2.2.2, it no longer needs Rust.
       - cargo-sources.json
