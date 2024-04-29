@@ -1,0 +1,64 @@
+diff --git a/src/desktop/mainwindow.cpp b/src/desktop/mainwindow.cpp
+index 46fd71af1..6f003edc0 100644
+--- a/src/desktop/mainwindow.cpp
++++ b/src/desktop/mainwindow.cpp
+@@ -122,6 +122,7 @@ static constexpr auto CTRL_KEY = Qt::CTRL;
+ #include "desktop/dialogs/startdialog.h"
+ #include "desktop/dialogs/animationimportdialog.h"
+ #include "libclient/import/loadresult.h"
++#include <functional>
+ 
+ #ifdef Q_OS_WIN
+ #include "desktop/bundled/kis_tablet/kis_tablet_support_win.h"
+@@ -131,6 +132,7 @@ static constexpr auto CTRL_KEY = Qt::CTRL;
+ #	include "libclient/server/builtinserver.h"
+ #endif
+ 
++using std::placeholders::_1;
+ using desktop::settings::Settings;
+ // Totally arbitrary nonsense
+ constexpr auto DEBOUNCE_MS = 250;
+@@ -1382,8 +1384,8 @@ void MainWindow::connectStartDialog(dialogs::StartDialog *dlg)
+ 	connections->add(connect(dlg, &dialogs::StartDialog::join, this, &MainWindow::joinSession));
+ 	connections->add(connect(dlg, &dialogs::StartDialog::host, this, &MainWindow::hostSession));
+ 	connections->add(connect(dlg, &dialogs::StartDialog::create, this, &MainWindow::newDocument));
+-	connections->add(connect(m_doc, &Document::canvasChanged, dlg, std::bind(&MainWindow::closeStartDialog, this, dlg)));
+-	connections->add(connect(m_doc, &Document::serverLoggedIn, dlg, std::bind(&MainWindow::closeStartDialog, this, dlg)));
++	connections->add(connect(m_doc, &Document::canvasChanged, dlg, std::bind(&MainWindow::closeStartDialog, this, dlg, true)));
++	connections->add(connect(m_doc, &Document::serverLoggedIn, dlg, std::bind(&MainWindow::closeStartDialog, this, dlg, _1)));
+ 	connections->add(connect(this, &MainWindow::hostSessionEnabled, dlg, &dialogs::StartDialog::hostPageEnabled));
+ 	connections->add(connect(this, &MainWindow::windowReplacementFailed, dlg, [dlg](MainWindow *win){
+ 		dlg->setParent(win, dlg->windowFlags());
+@@ -1411,11 +1413,15 @@ void MainWindow::setStartDialogActions(dialogs::StartDialog *dlg)
+ 	dlg->setActions(actions);
+ }
+ 
+-void MainWindow::closeStartDialog(dialogs::StartDialog *dlg)
++void MainWindow::closeStartDialog(dialogs::StartDialog *dlg, bool reparent)
+ {
+-	for(QDialog *child : dlg->findChildren<QDialog *>(QString(), Qt::FindDirectChildrenOnly)) {
+-		child->setParent(this, child->windowFlags());
+-		child->show();
++	if(reparent) {
++		for(QDialog *child : dlg->findChildren<QDialog *>(
++				QString(), Qt::FindDirectChildrenOnly)) {
++			child->setParent(this, child->windowFlags());
++			child->show();
++		}
++	} else {
+ 	}
+ 	dlg->close();
+ }
+diff --git a/src/desktop/mainwindow.h b/src/desktop/mainwindow.h
+index 3d073cd75..b9df7a029 100644
+--- a/src/desktop/mainwindow.h
++++ b/src/desktop/mainwindow.h
+@@ -255,7 +255,7 @@ private:
+ 
+ 	void connectStartDialog(dialogs::StartDialog *dlg);
+ 	void setStartDialogActions(dialogs::StartDialog *dlg);
+-	void closeStartDialog(dialogs::StartDialog *dlg);
++	void closeStartDialog(dialogs::StartDialog *dlg, bool join);
+ 	QWidget *getStartDialogOrThis();
+ 
+ 	void exportAnimation(
