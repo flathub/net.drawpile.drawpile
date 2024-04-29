@@ -76,6 +76,7 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
+      - -DBUILD_VERSION=2.2.1
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
@@ -83,3 +84,8 @@ modules:
         commit: 21018455808f683ca8c6a517983354cc6a933400
       # Remove this when updating to 2.2.2, it no longer needs Rust.
       - cargo-sources.json
+      # Remove this when updating to 2.2.2. It's a backported fix for a crash
+      # when hosting, see https://github.com/drawpile/Drawpile/issues/1305 and
+      # commit 2175ad9f7149c531a74f248d712847c8346c6001.
+      - type: patch
+        path: hostcrash.diff
