@@ -1,0 +1,47 @@
+diff --git a/src/desktop/main.cpp b/src/desktop/main.cpp
+index 84a424e22..b96163617 100644
+--- a/src/desktop/main.cpp
++++ b/src/desktop/main.cpp
+@@ -694,5 +694,6 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	compat::disableImageReaderAllocationLimit();
+ 	return app.exec();
+ }
+diff --git a/src/desktop/utils/qtguicompat.h b/src/desktop/utils/qtguicompat.h
+index 1b2106b83..e01898006 100644
+--- a/src/desktop/utils/qtguicompat.h
++++ b/src/desktop/utils/qtguicompat.h
+@@ -15,6 +15,7 @@
+ #include <QtGlobal>
+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+ #	include <QEventPoint>
++#	include <QImageReader>
+ #	include <QInputDevice>
+ #else
+ #	include <QTouchDevice>
+@@ -202,6 +203,11 @@ inline bool isTouchPad(const QTouchEvent *event)
+ 	return event->deviceType() == QInputDevice::DeviceType::TouchPad;
+ }
+ 
++inline void disableImageReaderAllocationLimit()
++{
++	QImageReader::setAllocationLimit(0);
++}
++
+ #else
+ using DeviceType = QTabletEvent::TabletDevice;
+ using EnterEvent = QEvent;
+@@ -304,6 +310,11 @@ inline bool isTouchPad(const QTouchEvent *event)
+ {
+ 	return touchDeviceType(event) == int(QTouchDevice::TouchPad);
+ }
++
++inline void disableImageReaderAllocationLimit()
++{
++	// Nothing to do, Qt 5 doesn't have this limit.
++}
+ #endif
+ }
+ 

@@ -76,7 +76,7 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.1
+      - -DBUILD_VERSION=2.2.1-flatpak2
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
@@ -89,3 +89,8 @@ modules:
       # commit 2175ad9f7149c531a74f248d712847c8346c6001.
       - type: patch
         path: hostcrash.diff
+      # Remove this when updating to 2.2.2. It's a backported fix for disabling
+      # Qt's image reader limit, which breaks opening large files. See commit
+      # a96926bf1048264f41aa6dff3ca344415e43b5ef.
+      - type: patch
+        path: imageiolimit.diff
