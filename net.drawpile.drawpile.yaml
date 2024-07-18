@@ -25,6 +25,12 @@ finish-args:
 
 modules:
   - shared-modules/libsecret/libsecret.json
+  - name: 'libxcb-cursor'
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: 'https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.4.tar.gz'
+        sha512: '84fc140f328ba92e10f21a1c2adf5a4ff2435b1013ce7da0c0fd8517d6770d45c38bf018de75a6de2639bf1651ac889ea1b273c547d4d08d760b9f261e5187a1'
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
