@@ -148,4 +148,4 @@ modules:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
         tag: 2.2.2-beta.3
-        commit: 70d487e90c82be8c438b29dfb96ed5636d88635d
+        commit: 28bb776e93a280a4ca9faceb2f7429d83d437c3f
