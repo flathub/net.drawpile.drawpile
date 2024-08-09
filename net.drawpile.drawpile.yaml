@@ -94,6 +94,7 @@ modules:
     buildsystem: cmake
     builddir: true
     config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
       - -DLIB_INSTALL_DIR=/app/lib
       - -DBUILD_TRANSLATIONS=off
@@ -107,6 +108,7 @@ modules:
     buildsystem: cmake
     builddir: true
     config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
       - -DBUILD_TOOLS=off
       - -DBUILD_REGRESS=off
