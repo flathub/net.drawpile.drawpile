@@ -1,0 +1,105 @@
+diff --git a/src/desktop/CMakeLists.txt b/src/desktop/CMakeLists.txt
+index efa2eba80..51ea9725a 100644
+--- a/src/desktop/CMakeLists.txt
++++ b/src/desktop/CMakeLists.txt
+@@ -271,6 +271,7 @@ target_sources(drawpile PRIVATE
+ 	utils/accountlistmodel.cpp
+ 	utils/accountlistmodel.h
+ 	utils/actionbuilder.h
++	utils/connections.h
+ 	utils/globalkeyeventfilter.cpp
+ 	utils/globalkeyeventfilter.h
+ 	utils/listserverdelegate.cpp
+diff --git a/src/desktop/mainwindow.cpp b/src/desktop/mainwindow.cpp
+index 6f003edc0..038b32fe5 100644
+--- a/src/desktop/mainwindow.cpp
++++ b/src/desktop/mainwindow.cpp
+@@ -63,6 +63,7 @@ static constexpr auto CTRL_KEY = Qt::CTRL;
+ #include "libclient/utils/customshortcutmodel.h"
+ #include "libclient/utils/logging.h"
+ #include "desktop/utils/actionbuilder.h"
++#include "desktop/utils/connections.h"
+ #include "desktop/utils/widgetutils.h"
+ 
+ #include "desktop/widgets/viewstatus.h"
+@@ -1345,38 +1346,15 @@ void MainWindow::showPopupMessage(const QString &message)
+ 
+ void MainWindow::connectStartDialog(dialogs::StartDialog *dlg)
+ {
+-	static constexpr char key[] = "startdialogconnections";
+-	class Connections final : public QObject {
+-	public:
+-		Connections(QObject *parent)
+-			: QObject{parent}
+-		{
+-			setObjectName(key);
+-		}
+-
+-		void add(const QMetaObject::Connection &con)
+-		{
+-			m_values.append(con);
+-		}
+-
+-		void clear()
+-		{
+-			for(const QMetaObject::Connection &con : m_values) {
+-				disconnect(con);
+-			}
+-		}
+-
+-	private:
+-		QVector<QMetaObject::Connection> m_values;
+-	};
+-
+-	Connections *previousConnections = dlg->findChild<Connections *>(key);
++	QString key = QStringLiteral("startdialogconnections");
++	utils::Connections *previousConnections =
++		dlg->findChild<utils::Connections *>(key);
+ 	if(previousConnections) {
+ 		previousConnections->clear();
+ 		delete previousConnections;
+ 	}
+ 
+-	Connections *connections = new Connections{dlg};
++	utils::Connections *connections = new utils::Connections(key, dlg);
+ 	connections->add(connect(dlg, &dialogs::StartDialog::openFile, this, QOverload<>::of(&MainWindow::open)));
+ 	connections->add(connect(dlg, &dialogs::StartDialog::openUrl, this, QOverload<const QUrl &>::of(&MainWindow::open)));
+ 	connections->add(connect(dlg, &dialogs::StartDialog::layouts, this, &MainWindow::showLayoutsDialog));
+diff --git a/src/desktop/utils/connections.h b/src/desktop/utils/connections.h
+new file mode 100644
+index 000000000..5681eb475
+--- /dev/null
++++ b/src/desktop/utils/connections.h
+@@ -0,0 +1,32 @@
++#ifndef DESKTOP_UTILS_CONNECTIONS_H
++#define DESKTOP_UTILS_CONNECTIONS_H
++#include <QMetaObject>
++#include <QObject>
++
++namespace utils {
++
++class Connections final : public QObject {
++	Q_OBJECT
++public:
++	Connections(const QString &key, QObject *parent = nullptr)
++		: QObject(parent)
++	{
++		setObjectName(key);
++	}
++
++	void add(const QMetaObject::Connection &con) { m_values.append(con); }
++
++	void clear()
++	{
++		for(const QMetaObject::Connection &con : m_values) {
++			disconnect(con);
++		}
++	}
++
++private:
++	QVector<QMetaObject::Connection> m_values;
++};
++
++}
++
++#endif
