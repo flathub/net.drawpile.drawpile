@@ -1,6 +1,6 @@
 app-id: net.drawpile.drawpile
 runtime: org.kde.Platform
-runtime-version: '6.7'
+runtime-version: '6.8'
 sdk: org.kde.Sdk
 command: drawpile
 rename-icon: drawpile
@@ -45,8 +45,6 @@ modules:
       - --disable-autodetect
       - --disable-programs
       - --disable-avdevice
-      - --disable-avfilter
-      - --disable-swresample
       - --disable-postproc
       - --disable-alsa
       - --disable-appkit
@@ -76,13 +74,19 @@ modules:
       - --disable-outdevs
       - --disable-devices
       - --disable-filters
-      - --enable-encoder=libx264
+      - --enable-encoder=gif
       - --enable-encoder=libvpx_vp8
       - --enable-encoder=libwebp
       - --enable-encoder=libwebp_anim
+      - --enable-encoder=libx264
+      - --enable-encoder=rawvideo
+      - --enable-muxer=gif
       - --enable-muxer=mp4
+      - --enable-muxer=rawvideo
       - --enable-muxer=webm
       - --enable-muxer=webp
+      - --enable-filter=palettegen
+      - --enable-filter=paletteuse
     cleanup:
       - /share/ffmpeg/examples
     sources:
@@ -140,12 +144,13 @@ modules:
       - -DSERVER=off
       - -DSERVERGUI=off
       - -DSOURCE_ASSETS=off
+      - -DPROXY_STYLE=on
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.2-beta.3
+      - -DBUILD_VERSION=2.2.2-beta.4
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        tag: 2.2.2-beta.3
-        commit: 28bb776e93a280a4ca9faceb2f7429d83d437c3f
+        tag: 2.2.2-beta.4
+        commit: b2221cd1ca3e6ec850a4a79d9507b85329d4403c
