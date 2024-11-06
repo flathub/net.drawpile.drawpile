@@ -1,7 +1,7 @@
 app-id: net.drawpile.drawpile
 branch: stable
 runtime: org.kde.Platform
-runtime-version: '6.6'
+runtime-version: '6.8'
 sdk: org.kde.Sdk
 # Remove this when updating to 2.2.2, it no longer needs Rust.
 sdk-extensions:
@@ -76,7 +76,7 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.1-flatpak2
+      - -DBUILD_VERSION=2.2.1-flatpak3
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
@@ -94,3 +94,8 @@ modules:
       # a96926bf1048264f41aa6dff3ca344415e43b5ef.
       - type: patch
         path: imageiolimit.diff
+      # Remove this when updating to 2.2.2. It's a backported fix for Qt
+      # suddenly requiring Q_OBJECT where it didn't before. See commit
+      # 243c26ac02bb324eb9fabdfb6df4dbe2ef458613.
+      - type: patch
+        path: startdialogconnections.diff
