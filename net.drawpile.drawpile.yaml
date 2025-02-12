@@ -92,8 +92,8 @@ modules:
     sources:
       - type: git
         url: https://git.ffmpeg.org/ffmpeg.git
-        tag: n7.0.1
-        commit: af25a4bfd2503caf3ee485b27b99b620302f5718
+        tag: n7.1
+        commit: b08d7969c550a804a59511c7b83f2dd8cc0499b8
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
