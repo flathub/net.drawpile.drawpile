@@ -129,8 +129,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/nih-at/libzip.git
-        tag: v1.10.1
-        commit: 210b09d9d2d0f4c0bbc64f92ad45c1ac53598fec
+        tag: v1.11.3
+        commit: f30f5290de485348442d168cd7b2eb714d1f20f9
   - name: drawpile
     buildsystem: cmake
     builddir: true
