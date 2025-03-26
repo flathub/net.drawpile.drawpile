@@ -148,9 +148,9 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.2-beta.5
+      - -DBUILD_VERSION=2.2.2
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        tag: 2.2.2-beta.5
-        commit: 5d2e99f56c30dcb16578b8e5276612c7dc4aae09
+        tag: 2.2.2
+        commit: a56a848613130b0f046404832ed0a2e9c6d34fa5
