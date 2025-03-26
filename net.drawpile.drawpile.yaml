@@ -1,17 +1,7 @@
 app-id: net.drawpile.drawpile
-branch: stable
 runtime: org.kde.Platform
 runtime-version: '6.8'
 sdk: org.kde.Sdk
-# Remove this when updating to 2.2.2, it no longer needs Rust.
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.rust-stable
-# Remove this when updating to 2.2.2, it no longer needs Rust.
-build-options:
-  append-path: /usr/lib/sdk/rust-stable/bin
-  env:
-    CARGO_HOME: /run/build/drawpile/cargo
-    CARGO_OFFLINE: 'true'
 command: drawpile
 rename-icon: drawpile
 finish-args:
@@ -25,10 +15,90 @@ finish-args:
 
 modules:
   - shared-modules/libsecret/libsecret.json
+  - name: libx264
+    buildsystem: autotools
+    config-opts:
+      - --enable-static
+      - --enable-pic
+      - --disable-lavf
+      - --disable-swscale
+      - --disable-avs
+      - --disable-ffms
+      - --disable-gpac
+      - --disable-lsmash
+      - --disable-bashcompletion
+      - --disable-cli
+      - --enable-strip
+    sources:
+      - type: git
+        url: https://code.videolan.org/videolan/x264.git
+        # I guess libx264 doesn't believe in versions, so this is the commit that
+        # the "stable" branch is at as of 2024-08-05.
+        commit: 31e19f92f00c7003fa115047ce50978bc98c3a0d
+  - name: ffmpeg
+    buildsystem: autotools
+    config-opts:
+      - --fatal-warnings
+      - --enable-gpl
+      - --enable-version3
+      - --disable-doc
+      - --disable-autodetect
+      - --disable-programs
+      - --disable-avdevice
+      - --disable-postproc
+      - --disable-alsa
+      - --disable-appkit
+      - --disable-avfoundation
+      - --disable-bzlib
+      - --disable-coreimage
+      - --disable-iconv
+      - --disable-lzma
+      - --disable-metal
+      - --disable-sndio
+      - --disable-schannel
+      - --disable-sdl2
+      - --disable-securetransport
+      - --disable-xlib
+      - --disable-zlib
+      - --enable-libx264
+      - --enable-libvpx
+      - --enable-libwebp
+      - --disable-encoders
+      - --disable-decoders
+      - --disable-muxers
+      - --disable-demuxers
+      - --disable-parsers
+      - --disable-bsfs
+      - --disable-protocols
+      - --disable-indevs
+      - --disable-outdevs
+      - --disable-devices
+      - --disable-filters
+      - --enable-encoder=gif
+      - --enable-encoder=libvpx_vp8
+      - --enable-encoder=libwebp
+      - --enable-encoder=libwebp_anim
+      - --enable-encoder=libx264
+      - --enable-encoder=rawvideo
+      - --enable-muxer=gif
+      - --enable-muxer=mp4
+      - --enable-muxer=rawvideo
+      - --enable-muxer=webm
+      - --enable-muxer=webp
+      - --enable-filter=palettegen
+      - --enable-filter=paletteuse
+    cleanup:
+      - /share/ffmpeg/examples
+    sources:
+      - type: git
+        url: https://git.ffmpeg.org/ffmpeg.git
+        tag: n7.1
+        commit: b08d7969c550a804a59511c7b83f2dd8cc0499b8
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
     config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
       - -DLIB_INSTALL_DIR=/app/lib
       - -DBUILD_TRANSLATIONS=off
@@ -36,12 +106,13 @@ modules:
     sources:
       - type: git
         url: https://github.com/frankosterfeld/qtkeychain.git
-        tag: 0.14.2
-        commit: 8eac9889775ca45c106d077bb0d3744754a1570a
+        tag: 0.14.3
+        commit: 38ff50766c7e4ec490fecb2d9939b7cdc4b74b8e
   - name: libzip
     buildsystem: cmake
     builddir: true
     config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_INSTALL_LIBDIR=/app/lib
       - -DBUILD_TOOLS=off
       - -DBUILD_REGRESS=off
@@ -58,8 +129,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/nih-at/libzip.git
-        tag: v1.10.1
-        commit: 210b09d9d2d0f4c0bbc64f92ad45c1ac53598fec
+        tag: v1.11.3
+        commit: f30f5290de485348442d168cd7b2eb714d1f20f9
   - name: drawpile
     buildsystem: cmake
     builddir: true
@@ -67,35 +138,19 @@ modules:
       - -DADDRESS_SANITIZER=off
       - -DBUILTINSERVER=on
       - -DCLANG_TIDY=off
-      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=on
       - -DINSTALL_DOC=off
       - -DSERVER=off
       - -DSERVERGUI=off
       - -DSOURCE_ASSETS=off
+      - -DPROXY_STYLE=on
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.1-flatpak3
+      - -DBUILD_VERSION=2.2.2
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        tag: 2.2.1
-        commit: 21018455808f683ca8c6a517983354cc6a933400
-      # Remove this when updating to 2.2.2, it no longer needs Rust.
-      - cargo-sources.json
-      # Remove this when updating to 2.2.2. It's a backported fix for a crash
-      # when hosting, see https://github.com/drawpile/Drawpile/issues/1305 and
-      # commit 2175ad9f7149c531a74f248d712847c8346c6001.
-      - type: patch
-        path: hostcrash.diff
-      # Remove this when updating to 2.2.2. It's a backported fix for disabling
-      # Qt's image reader limit, which breaks opening large files. See commit
-      # a96926bf1048264f41aa6dff3ca344415e43b5ef.
-      - type: patch
-        path: imageiolimit.diff
-      # Remove this when updating to 2.2.2. It's a backported fix for Qt
-      # suddenly requiring Q_OBJECT where it didn't before. See commit
-      # 243c26ac02bb324eb9fabdfb6df4dbe2ef458613.
-      - type: patch
-        path: startdialogconnections.diff
+        tag: 2.2.2
+        commit: a56a848613130b0f046404832ed0a2e9c6d34fa5
