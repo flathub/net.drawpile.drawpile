@@ -1,6 +1,6 @@
 app-id: net.drawpile.drawpile
 runtime: org.kde.Platform
-runtime-version: '6.8'
+runtime-version: '6.9'
 sdk: org.kde.Sdk
 command: drawpile
 rename-icon: drawpile
@@ -126,9 +126,9 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.3.0-beta.3
+      - -DBUILD_VERSION=2.3.0-beta.4
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        tag: 2.3.0-beta.3
-        commit: b18bade8074802ce29ed0038cb99f3b771d9bf1a
+        tag: 2.3.0-beta.4
+        commit: 6115a8b21ae2d2b9bcd513dadb504aa1fb13f1e0
