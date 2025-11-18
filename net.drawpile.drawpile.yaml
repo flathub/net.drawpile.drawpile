@@ -15,26 +15,6 @@ finish-args:
 
 modules:
   - shared-modules/libsecret/libsecret.json
-  - name: libx264
-    buildsystem: autotools
-    config-opts:
-      - --enable-static
-      - --enable-pic
-      - --disable-lavf
-      - --disable-swscale
-      - --disable-avs
-      - --disable-ffms
-      - --disable-gpac
-      - --disable-lsmash
-      - --disable-bashcompletion
-      - --disable-cli
-      - --enable-strip
-    sources:
-      - type: git
-        url: https://code.videolan.org/videolan/x264.git
-        # I guess libx264 doesn't believe in versions, so this is the commit that
-        # the "stable" branch is at as of 2024-08-05.
-        commit: 31e19f92f00c7003fa115047ce50978bc98c3a0d
   - name: ffmpeg
     buildsystem: autotools
     config-opts:
@@ -60,7 +40,6 @@ modules:
       - --disable-securetransport
       - --disable-xlib
       - --disable-zlib
-      - --enable-libx264
       - --enable-libvpx
       - --enable-libwebp
       - --disable-encoders
@@ -78,7 +57,6 @@ modules:
       - --enable-encoder=libvpx_vp8
       - --enable-encoder=libwebp
       - --enable-encoder=libwebp_anim
-      - --enable-encoder=libx264
       - --enable-encoder=rawvideo
       - --enable-muxer=gif
       - --enable-muxer=mp4
@@ -92,8 +70,8 @@ modules:
     sources:
       - type: git
         url: https://git.ffmpeg.org/ffmpeg.git
-        tag: n7.1
-        commit: b08d7969c550a804a59511c7b83f2dd8cc0499b8
+        tag: n7.1.1
+        commit: db69d06eeeab4f46da15030a80d539efb4503ca8
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
@@ -148,9 +126,9 @@ modules:
       - -DTESTS=off
       - -DTOOLS=off
       - -DUSE_STRICT_ALIASING=on
-      - -DBUILD_VERSION=2.2.2
+      - -DBUILD_VERSION=2.3.0
     sources:
       - type: git
         url: https://github.com/drawpile/Drawpile.git
-        tag: 2.2.2
-        commit: a56a848613130b0f046404832ed0a2e9c6d34fa5
+        tag: 2.3.0
+        commit: ff243e30e25f5ee08b6d5e750a00b33e114ef8b9
