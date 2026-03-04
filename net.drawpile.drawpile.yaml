@@ -1,6 +1,6 @@
 app-id: net.drawpile.drawpile
 runtime: org.kde.Platform
-runtime-version: '6.7'
+runtime-version: '6.10'
 sdk: org.kde.Sdk
 command: drawpile
 rename-icon: drawpile
@@ -14,64 +14,6 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
 
 modules:
-  - shared-modules/libsecret/libsecret.json
-  - name: ffmpeg
-    buildsystem: autotools
-    config-opts:
-      - --fatal-warnings
-      - --enable-gpl
-      - --enable-version3
-      - --disable-doc
-      - --disable-autodetect
-      - --disable-programs
-      - --disable-avdevice
-      - --disable-postproc
-      - --disable-alsa
-      - --disable-appkit
-      - --disable-avfoundation
-      - --disable-bzlib
-      - --disable-coreimage
-      - --disable-iconv
-      - --disable-lzma
-      - --disable-metal
-      - --disable-sndio
-      - --disable-schannel
-      - --disable-sdl2
-      - --disable-securetransport
-      - --disable-xlib
-      - --disable-zlib
-      - --enable-libvpx
-      - --enable-libwebp
-      - --disable-encoders
-      - --disable-decoders
-      - --disable-muxers
-      - --disable-demuxers
-      - --disable-parsers
-      - --disable-bsfs
-      - --disable-protocols
-      - --disable-indevs
-      - --disable-outdevs
-      - --disable-devices
-      - --disable-filters
-      - --enable-encoder=gif
-      - --enable-encoder=libvpx_vp8
-      - --enable-encoder=libwebp
-      - --enable-encoder=libwebp_anim
-      - --enable-encoder=rawvideo
-      - --enable-muxer=gif
-      - --enable-muxer=mp4
-      - --enable-muxer=rawvideo
-      - --enable-muxer=webm
-      - --enable-muxer=webp
-      - --enable-filter=palettegen
-      - --enable-filter=paletteuse
-    cleanup:
-      - /share/ffmpeg/examples
-    sources:
-      - type: git
-        url: https://git.ffmpeg.org/ffmpeg.git
-        tag: n7.1.1
-        commit: db69d06eeeab4f46da15030a80d539efb4503ca8
   - name: qtkeychain
     buildsystem: cmake
     builddir: true
@@ -86,6 +28,7 @@ modules:
         url: https://github.com/frankosterfeld/qtkeychain.git
         tag: 0.14.3
         commit: 38ff50766c7e4ec490fecb2d9939b7cdc4b74b8e
+
   - name: libzip
     buildsystem: cmake
     builddir: true
@@ -109,6 +52,7 @@ modules:
         url: https://github.com/nih-at/libzip.git
         tag: v1.11.3
         commit: f30f5290de485348442d168cd7b2eb714d1f20f9
+
   - name: drawpile
     buildsystem: cmake
     builddir: true
