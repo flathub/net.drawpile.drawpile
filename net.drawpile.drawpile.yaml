@@ -1,9 +1,14 @@
 app-id: net.drawpile.drawpile
 runtime: org.kde.Platform
-runtime-version: '6.7'
+runtime-version: '6.10'
 sdk: org.kde.Sdk
 command: drawpile
 rename-icon: drawpile
+# Gotta explicitly build with -fPIC, otherwise Qt crashes on startup.
+build-options:
+  cflags: '-fPIC'
+  cxxflags: '-fPIC'
+  ldflags: '-fPIC'
 finish-args:
   - --socket=wayland
   - --socket=fallback-x11
@@ -132,3 +137,7 @@ modules:
         url: https://github.com/drawpile/Drawpile.git
         tag: 2.3.0
         commit: ff243e30e25f5ee08b6d5e750a00b33e114ef8b9
+      # Remove this when updating to 2.3.1. It's a backported fix for an
+      # incompatibility introduced in later Qt versions.
+      - type: patch
+        path: compatflagsarg.diff
